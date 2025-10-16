@@ -1,7 +1,6 @@
 import express from 'express';
 const router = express.Router();
 
-// 登录接口
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
   if (username === 'admin' && password === '1234') {
@@ -11,7 +10,6 @@ router.post('/login', (req, res) => {
   }
 });
 
-// 登出接口
 router.post('/logout', (req, res) => {
   res.json({ message: 'Logged out successfully' });
 });

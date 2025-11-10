@@ -7,3 +7,22 @@ Content-Type: application/json
   "username": "admin",
   "password": "1234"
 }
+
+### Get all items
+GET http://localhost:5153/catalog
+
+### Get item by id (1)
+GET http://localhost:5153/catalog/1
+
+### Get item by id (2)
+GET http://localhost:5153/catalog/2
+
+### NotFound case
+GET http://localhost:5153/catalog/3
+
+### 404
+GET http://localhost:5153/catalog/db/999
+
+
+GET http://localhost:5153/catalog/db
+

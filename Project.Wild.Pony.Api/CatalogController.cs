@@ -1,7 +1,7 @@
-
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Project.Wild.Pony.Domain.Catalog;
+using Project.Wild.Pony.Data; 
 
 namespace Project.Wild.Pony.Domain.Controllers
 {
@@ -9,6 +9,24 @@ namespace Project.Wild.Pony.Domain.Controllers
     [Route("[controller]")]
     public class CatalogController : ControllerBase
     {
+        private readonly StoreContext _db;
+
+        public CatalogController(StoreContext db)
+        {
+            _db = db;
+        }
+
+        [HttpGet("db")]              // /catalog/db
+        public IActionResult GetItemsFromDb() => Ok(_db.Items);
+
+        [HttpGet("db/{id:int}")]     // /catalog/db/{id}
+        public IActionResult GetItemFromDb(int id) 
+        {
+            var item = _db.Items.Find(id);
+             if (item == null) return NotFound();
+         return Ok(item);
+        }
+        
         [HttpGet]
         public IActionResult GetItems()
         {

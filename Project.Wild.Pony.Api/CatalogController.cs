@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Project.Wild.Pony.Domain.Catalog;
@@ -14,23 +13,13 @@ namespace Project.Wild.Pony.Api.Controllers
     public class CatalogController : ControllerBase
     {
         private readonly StoreContext _db;
-
         public CatalogController(StoreContext db)
         {
             _db = db;
         }
 
-        [HttpGet("db")]              // /catalog/db
-        public IActionResult GetItemsFromDb() => Ok(_db.Items);
 
-        [HttpGet("db/{id:int}")]     // /catalog/db/{id}
-        public IActionResult GetItemFromDb(int id) 
-        {
-            var item = _db.Items.Find(id);
-             if (item == null) return NotFound();
-         return Ok(item);
-        }
-        
+        // GET /catalog
         [HttpGet]
         public IActionResult GetItems()
         {

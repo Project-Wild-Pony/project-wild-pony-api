@@ -7,3 +7,29 @@ Content-Type: application/json
   "username": "admin",
   "password": "1234"
 }
+
+
+### Get Catalog
+GET {{host}}/Catalog
+
+### Add a Catalog item
+POST {{host}}/Catalog
+Content-Type: application/json
+
+{
+  "name": "Hat",
+  "description": "Ohio State hat",
+  "brand": "Nike",
+  "price": 19.99
+}
+
+### Add rating
+POST {{host}}/Catalog/1/ratings
+Content-Type: application/json
+
+{
+  "stars": 5,
+  "username": "Tom",
+  "review": "Nice!"
+}
+

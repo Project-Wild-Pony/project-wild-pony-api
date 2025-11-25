@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Project.Wild.Pony.Data;
 
 namespace jet.piranha.Api
 {
@@ -21,6 +23,9 @@ namespace jet.piranha.Api
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            services.AddDbContext<StoreContext>(options =>
+                options.UseSqlite("Data Source=../Registrar.sqlite",
+                    b => b.MigrationsAssembly("Project.Wild.Pony.Api")));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

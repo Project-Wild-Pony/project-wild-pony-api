@@ -1,0 +1,40 @@
+### 1. Get an access token WITH delete:catalog
+POST https://dev-6whe2e14h4n5bq48.us.auth0.com/oauth/token
+Content-Type: application/json
+
+{
+  "client_id": "20rolq9y1s2wW31BsonxUZGJLYIHA9Og",
+  "client_secret": "W0j44lEBIKHaM_sApwHICMFFrr7i3gDQIlvVnO0v3hOqHtUXznWPoB4zdY6D2GFP",
+  "audience": "https://wild-pony",
+  "grant_type": "client_credentials",
+  "scope": "delete:catalog"
+}
+
+### 2. Test GET catalog WITHOUT token (should be 401)
+GET https://localhost:7250/catalog
+
+### 3. Test GET catalog WITH token (should be 200)
+GET https://localhost:7250/catalog
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImpIcFhoNEVvLXBWa2lwbVh3cmVfaiJ9.eyJpc3MiOiJodHRwczovL2Rldi02d2hlMmUxNGg0bjVicTQ4LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiIyMHJvbHE5eTFzMndXMzFCc29ueFVaR0pMWUlIQTlPZ0BjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly93aWxkLXBvbnkiLCJpYXQiOjE3NjUxNzIzNTAsImV4cCI6MTc2NTI1ODc1MCwic2NvcGUiOiJkZWxldGU6Y2F0YWxvZyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6IjIwcm9scTl5MXMyd1czMUJzb254VVpHSkxZSUhBOU9nIn0.fe8ALXF_mKwJ3saCrUgGd1ZQexAPLZN5M3id04MD22jHI8QtAV0yaPSlCSqkZwAkuV8Gws5QhXhAyJMWAoLV7qdJJL0SyqxxEI2ycNbAC5qOxxB6BQg0y26n9rUXGaAftHfTk7ADoF-S62mCi65RgNDcLL4IuEyL5BEm6cIvZ5pJ8UUUfGOSN1NctNshyaLpQVwWFior-nZZAgX8U2lKUGklZfQhfaOJnRd0oHnxWkIGSuZnae7_Y3w8k8XDCNAiaUI1qawBMHHGb9j7NgooQW8zzyWTaTqz7u0L-1c2Iot5DFh9KDTSXGW5Kvz5GJJAAckOWgbXbG-1TguvaMVgug
+
+
+### 4. DELETE item WITH delete:catalog scope (should be 200 or 404)
+DELETE https://localhost:7250/catalog/1
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImpIcFhoNEVvLXBWa2lwbVh3cmVfaiJ9.eyJpc3MiOiJodHRwczovL2Rldi02d2hlMmUxNGg0bjVicTQ4LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiIyMHJvbHE5eTFzMndXMzFCc29ueFVaR0pMWUlIQTlPZ0BjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly93aWxkLXBvbnkiLCJpYXQiOjE3NjUxNzIzNTAsImV4cCI6MTc2NTI1ODc1MCwic2NvcGUiOiJkZWxldGU6Y2F0YWxvZyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6IjIwcm9scTl5MXMyd1czMUJzb254VVpHSkxZSUhBOU9nIn0.fe8ALXF_mKwJ3saCrUgGd1ZQexAPLZN5M3id04MD22jHI8QtAV0yaPSlCSqkZwAkuV8Gws5QhXhAyJMWAoLV7qdJJL0SyqxxEI2ycNbAC5qOxxB6BQg0y26n9rUXGaAftHfTk7ADoF-S62mCi65RgNDcLL4IuEyL5BEm6cIvZ5pJ8UUUfGOSN1NctNshyaLpQVwWFior-nZZAgX8U2lKUGklZfQhfaOJnRd0oHnxWkIGSuZnae7_Y3w8k8XDCNAiaUI1qawBMHHGb9j7NgooQW8zzyWTaTqz7u0L-1c2Iot5DFh9KDTSXGW5Kvz5GJJAAckOWgbXbG-1TguvaMVgug
+
+
+### 5. Get token WITHOUT delete scope (forbidden test)
+POST https://dev-6whe2e14h4n5bq48.us.auth0.com/oauth/token
+Content-Type: application/json
+
+{
+  "client_id": "20rolq9y1s2wW31BsonxUZGJLYIHA9Og",
+  "client_secret": "W0j44lEBIKHaM_sApwHICMFFrr7i3gDQIlvVnO0v3hOqHtUXznWPoB4zdY6D2GFP",
+  "audience": "https://wild-pony",
+  "grant_type": "client_credentials",
+  "scope": ""
+}
+
+### 6. DELETE with NO delete:catalog scope (should be 403 Forbidden)
+DELETE https://localhost:7250/catalog/1
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImpIcFhoNEVvLXBWa2lwbVh3cmVfaiJ9.eyJpc3MiOiJodHRwczovL2Rldi02d2hlMmUxNGg0bjVicTQ4LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiIyMHJvbHE5eTFzMndXMzFCc29ueFVaR0pMWUlIQTlPZ0BjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly93aWxkLXBvbnkiLCJpYXQiOjE3NjUxNzIzNTAsImV4cCI6MTc2NTI1ODc1MCwic2NvcGUiOiJkZWxldGU6Y2F0YWxvZyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6IjIwcm9scTl5MXMyd1czMUJzb254VVpHSkxZSUhBOU9nIn0.fe8ALXF_mKwJ3saCrUgGd1ZQexAPLZN5M3id04MD22jHI8QtAV0yaPSlCSqkZwAkuV8Gws5QhXhAyJMWAoLV7qdJJL0SyqxxEI2ycNbAC5qOxxB6BQg0y26n9rUXGaAftHfTk7ADoF-S62mCi65RgNDcLL4IuEyL5BEm6cIvZ5pJ8UUUfGOSN1NctNshyaLpQVwWFior-nZZAgX8U2lKUGklZfQhfaOJnRd0oHnxWkIGSuZnae7_Y3w8k8XDCNAiaUI1qawBMHHGb9j7NgooQW8zzyWTaTqz7u0L-1c2Iot5DFh9KDTSXGW5Kvz5GJJAAckOWgbXbG-1TguvaMVgug

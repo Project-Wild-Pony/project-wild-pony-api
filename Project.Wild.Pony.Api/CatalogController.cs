@@ -1,14 +1,13 @@
-
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Project.Wild.Pony.Domain.Catalog;
+using Microsoft.AspNetCore.Authorization;
 using Project.Wild.Pony.Data;
-using System.Linq.Expressions;
+using Project.Wild.Pony.Domain.Catalog;
 
-namespace Project.Wild.Pony.Domain.Controllers
+namespace Project.Wild.Pony.Api.Controllers
 {
     [ApiController]
     [Route("/catalog")]
+    [Authorize] // 🔒 THIS SECURES ALL ENDPOINTS
     public class CatalogController : ControllerBase
     {
         private readonly StoreContext _db;
@@ -17,6 +16,7 @@ namespace Project.Wild.Pony.Domain.Controllers
         {
             _db = db;
         }
+
         [HttpGet]
         public IActionResult GetItems()
         {
@@ -31,8 +31,9 @@ namespace Project.Wild.Pony.Domain.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            return Ok(item);
         }
+
         [HttpPost]
         public IActionResult Post(Item item)
         {
@@ -40,6 +41,7 @@ namespace Project.Wild.Pony.Domain.Controllers
             _db.SaveChanges();
             return Created($"/catalog/{item.Id}", item);
         }
+
         [HttpPost("{id:int}/ratings")]
         public IActionResult PostRating(int id, [FromBody] Rating rating)
         {
@@ -48,18 +50,21 @@ namespace Project.Wild.Pony.Domain.Controllers
             {
                 return NotFound();
             }
+
             item.AddRating(rating);
             _db.SaveChanges();
 
             return Ok(item);
         }
-        [HttpPut("id:int")]
+
+        [HttpPut("{id:int}")]
         public IActionResult PutItem(int id, [FromBody] Item item)
         {
             if (id != item.Id)
             {
                 return BadRequest();
             }
+
             if (_db.Items.Find(id) == null)
             {
                 return NotFound();
@@ -67,9 +72,12 @@ namespace Project.Wild.Pony.Domain.Controllers
 
             _db.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _db.SaveChanges();
+
             return NoContent();
         }
 
+        // ⭐ DELETE stays protected with the policy
+        [Authorize(Policy = "delete:catalog")]
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {
@@ -78,10 +86,10 @@ namespace Project.Wild.Pony.Domain.Controllers
             {
                 return NotFound();
             }
-            
+
             _db.Items.Remove(item);
             _db.SaveChanges();
-            
+
             return Ok();
         }
     }
